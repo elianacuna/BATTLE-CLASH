@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario - BattleClash</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/usuario.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+</head>
+<body>
+    
+    <div class="container d-flex justify-content-center align-items-center vh-100" style="margin-top: 20px;">
+        <div class="card shadow p-4" style="max-width: 1000px; max-height: 909px; height: 100%; width: 100%; border-radius: 20px;">
+            <h2 class="text-center fw-bold" style="margin-top: 30px;">Battle Clash</h2>
+            <p class="text-center">Registrarse en battle-clash es totalmente gratis.</p>
+    
+            <div class="d-flex justify-content-center" style="margin-top: 50px;">
+                <div style="max-width: 400px; width: 100%;">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="nombre_usuario" placeholder="Nombre de usuario" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" id="correo" placeholder="Correo electrónico" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" id="contrasena" placeholder="Contraseña" required>
+                        </div>
+
+                        <div class="d-grid gap-2" style="margin-top: 30px;">
+                            <button type="submit" id="registerButton" class="btn btn-primary">Registrarte</button>
+                            <a href="login.html" class="btn " style="margin-top: 20px;">¿Ya tienes una cuenta?</a>
+                        </div>
+
+                        <div id="responseMessage" style="margin-top: 20px;"></div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $('#registerForm').on('submit', function(e) {
+            e.preventDefault();
+
+            $('#registerButton').prop('disabled', true);
+
+            $('#responseMessage').html('<div class="alert alert-info">Cargando... Espere un momento mientras procesamos su solicitud.</div>');
+
+            var nombreUsuario = $('#nombre_usuario').val();
+            var correo = $('#correo').val();
+            var contrasena = $('#contrasena').val();
+
+            // Aquí haces la llamada AJAX al servidor para registrar al usuario
+            $.ajax({
+                url: 'modules/apis/usuario.php?action=register', 
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    nombre_usuario: nombreUsuario,
+                    correo: correo,
+                    contrasena: contrasena,
+                    rol: "jugador"
+                }),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        $('#responseMessage').html('<div class="alert alert-success">Usuario registrado correctamente. Ahora puedes iniciar sesión.</div>');
+                    } else {
+                        $('#responseMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
+
+                    $('#registerButton').prop('disabled', false);
+                },
+                error: function(error) {
+                    console.log(error);
+                    $('#responseMessage').html('<div class="alert alert-danger">Error en la conexión. Intente nuevamente.</div>');
+
+                    $('#registerButton').prop('disabled', false);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
