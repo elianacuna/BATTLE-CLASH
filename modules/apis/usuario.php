@@ -82,9 +82,44 @@ function crearJugadorusuario($conn) {
     }
 }
 
-function recuperarcontrasena($conn){
+function listarTodosUsuarios($conn){
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
+        $criterio = isset($_GET['criterio']) ? $_GET['criterio'] : NULL;
+        $rol = isset($_GET['rol']) ? $_GET['rol'] : NULL;
+
+        $sql = "{CALL sp_listar_usuario(?, ?)}";
+        $params = array($criterio, $rol);
+        $stmt = sqlsrv_query($conn, $sql, $params);
+
+        if ($stmt === false) {
+            echo json_encode(['error' => 'Error en la consulta', 'details' => sqlsrv_errors()]);
+            exit();
+        }
+
+        $usuarios = array();
+        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+            $usuarios[] = $row;
+        }
+
+        if (count($usuarios) > 0) {
+            echo json_encode([
+                'status' => 'success',
+                'data' => $usuarios
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'No se encontraron usuarios.'
+            ]);
+        }
+
+        sqlsrv_free_stmt($stmt);
+    } else {
+        echo json_encode(['error' => 'Método no permitido']);
+    }
 }
+
 
 // Determinar la acción si es login, register, recover:
 function determinarLoginRegister($conn){
@@ -93,8 +128,8 @@ function determinarLoginRegister($conn){
             iniciarSesion($conn);
         } elseif ($_GET['action'] === 'register') {
             crearJugadorusuario($conn);
-        } elseif ($_GET['action'] == 'recover') {
-            recuperarcontrasena($conn);
+        } elseif ($_GET['action'] == 'listar') {
+            listarTodosUsuarios($conn);
         } else {
             echo json_encode(['error' => 'Acción no permitida']);
         }

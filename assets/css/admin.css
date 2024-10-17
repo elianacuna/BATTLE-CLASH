@@ -1,3 +1,4 @@
+/* HOME */
 body {
     background: linear-gradient(to bottom right, #2A58E1, #82A1FF);
 }
@@ -14,38 +15,22 @@ h1 {
     color: #2A58E1;
 }
 
-.card {
-    margin: 20px;
-    border: none;
-    border-radius: 15px;
+/* Tabla de Usuarios */
+.table {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-.card-title {
-    font-size: 24px;
-    color: #2A58E1;
-}
-
-.card-text {
-    font-size: 16px;
-    color: #555;
-}
-
-.btn-primary {
+.table thead {
     background-color: #2A58E1;
-    border-color: #2A58E1;
+    color: white;
 }
 
-.btn-success {
-    background-color: #28a745;
-    border-color: #28a745;
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
 }
 
-.btn-warning {
-    background-color: #ffc107;
-    border-color: #ffc107;
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
+.form-control {
+    border-radius: 10px;
 }

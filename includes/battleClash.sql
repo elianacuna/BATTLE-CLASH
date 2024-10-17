@@ -32,7 +32,7 @@ GO
 
 CREATE TABLE Rol (
     id_rol INT PRIMARY KEY IDENTITY(1,1),       
-    rol VARCHAR(10) CHECK (rol IN ('admin', 'jugador')),
+    rol VARCHAR(10) CHECK (rol IN ('admin', 'jugador', 'bloqueado')),
     id_jugador INT,                             
     FOREIGN KEY (id_jugador) REFERENCES Usuario(id_jugador) 
 );
@@ -200,6 +200,33 @@ BEGIN
     END
 END;
 GO
+
+--Listar
+CREATE PROCEDURE sp_listar_usuario
+    @criterio NVARCHAR(100) = NULL, 
+    @rol NVARCHAR(10) = NULL 
+AS
+BEGIN 
+    SELECT 
+        u.id_jugador AS ID, 
+        u.nombre_usuario AS Username, 
+        u.ranking, 
+        r.rol 
+    FROM 
+        Usuario u
+    INNER JOIN
+        Rol r ON u.id_jugador = r.id_rol
+    WHERE
+        (
+            (@criterio IS NULL OR u.nombre_usuario LIKE '%' + @criterio + '%')
+            OR (@criterio IS NULL OR CAST(u.ranking AS NVARCHAR) LIKE '%' + @criterio + '%')
+        )
+        AND 
+        (@rol IS NULL OR r.rol LIKE '%' + @rol + '%')
+END;
+GO
+
+--Actualizar
 
 
 --Llenar las tablas
