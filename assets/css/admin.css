@@ -1,0 +1,51 @@
+body {
+    background: linear-gradient(to bottom right, #2A58E1, #82A1FF);
+}
+
+header {
+    background-color: white;
+    color: #2A58E1;
+    font-size: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid #82A1FF;
+}
+
+h1 {
+    color: #2A58E1;
+}
+
+.card {
+    margin: 20px;
+    border: none;
+    border-radius: 15px;
+}
+
+.card-title {
+    font-size: 24px;
+    color: #2A58E1;
+}
+
+.card-text {
+    font-size: 16px;
+    color: #555;
+}
+
+.btn-primary {
+    background-color: #2A58E1;
+    border-color: #2A58E1;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
