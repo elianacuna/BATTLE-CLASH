@@ -24,9 +24,8 @@
                         <div class="mb-3 d-flex justify-content-between">
                             <input type="password" class="form-control" id="contrasena" placeholder="Contraseña" required>
                         </div>
-                        <a href="#" class="ms-2">Recuperar contraseña</a>
     
-                        <div class="d-grid gap-2" style="margin-top: 30px;">
+                        <div class="d-grid gap-2" style="margin-top: 50px;">
                             <button type="submit" id="loginButton" class="btn btn-primary">Iniciar Sesión</button>
                             <a href="register.html" class="btn btn-outline-primary" style="margin-top: 20px;">Crear cuenta</a>
                         </div>
@@ -44,41 +43,49 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        $('#loginForm').on('submit', function(e) {
-            e.preventDefault();
+       $('#loginForm').on('submit', function(e) {
+    e.preventDefault();
 
-            $('#loginButton').prop('disabled', true);
+    $('#loginButton').prop('disabled', true);
 
-            $('#responseMessage').html('<div class="alert alert-info">Cargando... Espere un momento mientras procesamos su solicitud.</div>');
+    $('#responseMessage').html('<div class="alert alert-info">Cargando... Espere un momento mientras procesamos su solicitud.</div>');
 
-            var correo = $('#correo').val();
-            var contrasena = $('#contrasena').val();
+    var correo = $('#correo').val();
+    var contrasena = $('#contrasena').val();
 
-            $.ajax({
-                url: 'modules/apis/usuario.php?action=login', 
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    correo: correo,
-                    contrasena: contrasena
-                }),
-                success: function(response) {
-                    if (response.status === 'success') {
-                        $('#responseMessage').html('<div class="alert alert-success">Login exitoso. Bienvenido ' + response.data.username + '</div>');
-                    } else {
-                        $('#responseMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
-                    }
-
-                    $('#loginButton').prop('disabled', false);
-                },
-                error: function(error) {
-                    console.log(error);
-                    $('#responseMessage').html('<div class="alert alert-danger">No coinciden los datos. Intente nuevamente.</div>');
-
-                    $('#loginButton').prop('disabled', false);
+    $.ajax({
+        url: 'modules/apis/usuario.php?action=login', 
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            correo: correo,
+            contrasena: contrasena
+        }),
+        success: function(response) {
+            if (response.status === 'success') {
+                $('#responseMessage').html('<div class="alert alert-success">Login exitoso. Bienvenido ' + response.data.username + '</div>');
+                
+                // Verifica el rol del usuario y redirige a la página correspondiente
+                if (response.data.rol === 'jugador') {
+                    window.location.href = 'main.html'; // Redirigir a la página de jugador
+                } else if (response.data.rol === 'admin') {
+                    window.location.href = 'index.html'; // Redirigir a la página de admin
                 }
-            });
-        });
+            } else {
+                $('#responseMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
+            }
+
+            $('#loginButton').prop('disabled', false);
+        },
+        error: function(error) {
+            console.log(error);
+            $('#responseMessage').html('<div class="alert alert-danger">No coinciden los datos. Intente nuevamente.</div>');
+
+            $('#loginButton').prop('disabled', false);
+        }
+    });
+});
+
     </script>
 </body>
 </html>
