@@ -120,8 +120,69 @@ function listarTodosUsuarios($conn){
     }
 }
 
+function obtenerUsuarioPorId($conn) {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
+        $id = $_GET['id'];
 
-// Determinar la acción si es login, register, recover:
+        $sql = "SELECT ID, Username, rol FROM Usuario WHERE ID = ?";
+        $params = array($id);
+        $stmt = sqlsrv_query($conn, $sql, $params);
+
+        if ($stmt === false) {
+            echo json_encode(['error' => 'Error en la consulta', 'details' => sqlsrv_errors()]);
+            exit();
+        }
+
+        $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+
+        if ($userData) {
+            echo json_encode(['status' => 'success', 'data' => $userData]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Usuario no encontrado']);
+        }
+
+        sqlsrv_free_stmt($stmt);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Solicitud inválida o falta el parámetro ID']);
+    }
+}
+
+
+function actualizarUsuarioRol($conn) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'update') {
+
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (!isset($input['rol']) || !isset($input['id'])) {
+            echo json_encode(['error' => 'Faltan datos: rol o id']);
+            exit();
+        }
+
+        $rol = $input['rol'];
+        $id = $input['id'];
+
+        $sql = "{CALL sp_actualizar_usuario(?, ?)}";
+        $params = array($rol, $id);
+        $stmt = sqlsrv_query($conn, $sql, $params);
+
+        if ($stmt === false) {
+            $errors = sqlsrv_errors();
+            echo json_encode(['error' => 'Error en la consulta', 'details' => $errors]);
+            exit();
+        }
+
+        $rowsAffected = sqlsrv_rows_affected($stmt);
+        if ($rowsAffected === false || $rowsAffected === 0) {
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo actualizar el usuario']);
+        } else {
+            echo json_encode(['status' => 'success', 'message' => 'Usuario actualizado correctamente']);
+        }
+
+        sqlsrv_free_stmt($stmt);
+    }
+}
+
+// Determinar la acción
 function determinarLoginRegister($conn){
     if (isset($_GET['action'])) {
         if ($_GET['action'] === 'login') {
@@ -130,6 +191,10 @@ function determinarLoginRegister($conn){
             crearJugadorusuario($conn);
         } elseif ($_GET['action'] == 'listar') {
             listarTodosUsuarios($conn);
+        } elseif ($_GET['action'] == 'update') {
+            actualizarUsuarioRol($conn);
+        } elseif ($_GET['action'] == 'getUser') {
+            obtenerUsuarioPorId($conn);
         } else {
             echo json_encode(['error' => 'Acción no permitida']);
         }

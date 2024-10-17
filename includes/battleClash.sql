@@ -227,11 +227,26 @@ END;
 GO
 
 --Actualizar
+CREATE PROCEDURE sp_actualizar_usuario
+@rol NVARCHAR(11),
+@id INT 
 
+AS
+BEGIN
+
+    UPDATE
+        Rol
+    SET
+        rol = @rol
+    WHERE
+        id_jugador = @id
+
+END;
+GO
 
 --Llenar las tablas
 EXEC sp_registrar_jugador 
-    @nombre_usuario = 'Admin', 
-    @correo = 'admin@battleroyal.com', 
-    @contrasena = 'Holaque@#22', 
+    @nombre_usuario = 'admin', 
+    @correo = 'admin@battleclash.com', 
+    @contrasena = 'Holaque@#2', 
     @rol = 'Admin';
