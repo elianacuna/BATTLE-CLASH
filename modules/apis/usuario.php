@@ -4,8 +4,9 @@ include_once '../../includes/db_connection.php';
 header('Content-Type: application/json');
 
 function iniciarSesion($conn){
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    session_start();  // Asegúrate de iniciar la sesión al principio
 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $input = json_decode(file_get_contents('php://input'), true);
         
         if (!isset($input['correo']) || !isset($input['contrasena'])) {
@@ -27,6 +28,12 @@ function iniciarSesion($conn){
         $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
     
         if ($userData) {
+            // Establece las variables de sesión
+            $_SESSION['loggedin'] = true;
+            $_SESSION['user_id'] = $userData['ID'];
+            $_SESSION['user_email'] = $userData['email'];
+            $_SESSION['user_rol'] = $userData['rol'];
+
             echo json_encode([
                 'status' => 'success',
                 'data' => $userData
@@ -42,9 +49,8 @@ function iniciarSesion($conn){
     } else {
         echo json_encode(['error' => 'Método no permitido']);
     }
-    
-
 }
+
 
 function crearJugadorusuario($conn) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'register') {
@@ -124,7 +130,12 @@ function obtenerUsuarioPorId($conn) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
         $id = $_GET['id'];
 
-        $sql = "SELECT ID, Username, rol FROM Usuario WHERE ID = ?";
+        if (!is_numeric($id)) {
+            echo json_encode(['error' => 'El ID debe ser un número']);
+            exit();
+        }
+
+        $sql = "exec sp_leer_info_usuario @id = ? ";
         $params = array($id);
         $stmt = sqlsrv_query($conn, $sql, $params);
 

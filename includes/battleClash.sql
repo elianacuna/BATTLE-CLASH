@@ -226,6 +226,22 @@ BEGIN
 END;
 GO
 
+--Leer información del usuario
+CREATE PROCEDURE sp_leer_info_usuario
+@id INT
+AS
+BEGIN
+    SELECT 
+        u.id_jugador, u.nombre_usuario, r.rol
+    FROM 
+        Usuario u 
+    INNER JOIN 
+        Rol r ON u.id_jugador = r.id_jugador
+    WHERE 
+        u.id_jugador = @id
+END;
+GO
+
 --Actualizar
 CREATE PROCEDURE sp_actualizar_usuario
 @rol NVARCHAR(11),
@@ -244,9 +260,12 @@ BEGIN
 END;
 GO
 
+--Carta
+
+
 --Llenar las tablas
 EXEC sp_registrar_jugador 
-    @nombre_usuario = 'admin', 
+    @nombre_usuario = 'Admin', 
     @correo = 'admin@battleclash.com', 
     @contrasena = 'Holaque@#2', 
-    @rol = 'Admin';
+    @rol = 'admin';

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <header class="bg-primary text-white py-3 shadow-sm">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="usuarios.html" class="btn btn-outline-light d-flex align-items-center">
+                <i class="bi bi-arrow-left-circle me-2"></i> Regresar
+            </a>
+            <div class="text-center flex-grow-1">
+                <h1 class="fs-3 mb-0 fw-bold">Actualizar usuario</h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mt-4">
+        <form id="updateForm">
+            <input type="hidden" id="userId">
+            <div class="mb-3">
+                <label for="userId" class="form-label">ID</label>
+                <input type="number" class="form-control" id="userId" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">Nombre de Usuario</label>
+                <input type="text" class="form-control" id="username" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="editRol" class="form-label">Rol</label>
+                <select id="editRol" class="form-control">
+                    <option value="admin">Admin</option>
+                    <option value="jugador">Jugador</option>
+                    <option value="bloqueado">Bloqueado</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        function getParameterByName(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        $(document).ready(function() {
+            const userId = getParameterByName('id'); 
+
+            if (userId) {
+                cargarDatosUsuario(userId); 
+            } else {
+                alert('No se encontró el ID del usuario en la URL');
+            }
+        });
+
+        function cargarDatosUsuario(id) {
+            $.ajax({
+                url: '../../../modules/apis/usuario.php?action=getUser',
+                method: 'GET',
+                data: { id: id }, 
+                success: function(response) {
+                    console.log(response);
+                    if (response.status === 'success') {
+                        $('#username').val(response.data.nombre_usuario);  
+
+                        let rol = response.data.rol.charAt(0).toUpperCase() + response.data.rol.slice(1).toLowerCase();
+                        $('#editRol').val(rol);  
+                    } else {
+                        alert('Error al cargar los datos del usuario: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener los datos del usuario:', xhr.responseText);
+                    console.error('Status:', status);
+                    console.error('Error:', error);
+                    alert('Ocurrió un error al intentar cargar los datos del usuario.');
+                }
+            });
+        }
+
+        $('#updateForm').on('submit', function(e) {
+    e.preventDefault(); 
+
+    const userId = getParameterByName('id');
+    const rol = $('#editRol').val();
+
+    $.ajax({
+        url: '../../../modules/apis/usuario.php?action=update', 
+        method: 'POST',
+        data: JSON.stringify({
+            id: userId,
+            rol: rol
+        }),
+        contentType: 'application/json',
+        success: function(response) {
+            if (response.status === 'success') {
+                window.location.href = 'usuarios.html?id=' + userId;
+                alert('Usuario actualizado correctamente');
+            } else {
+                alert('Error al actualizar el usuario: ' + response.message);
+            }
+        },
+        error: function(error) {
+            console.error('Error al actualizar el usuario:', error);
+            alert('Ocurrió un error al intentar actualizar el usuario.');
+        }
+    });
+});
+
+// Verificar si el usuario a iniciado sesion
+window.onload = function() {
+            fetch('../../../modules/apis/functions.php?action=checkLogin')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status !== 'logged_in') {
+                        // Si no está logueado, redirigir a login.html
+                        window.location.href = '../../../login.html';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error verificando la sesión:', error);
+                    window.location.href = '../../../login.html';
+                });
+        };
+
+    </script>
+</body>
+</html>
