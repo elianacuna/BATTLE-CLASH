@@ -42,6 +42,7 @@ CREATE TABLE Carta (
     id_carta INT PRIMARY KEY IDENTITY(1,1),
     tipo_carta VARCHAR(50),
     nombre_carta VARCHAR(100),
+    foto NVARCHAR(255) NOT NULL,
     poder_ataque INT,
     poder_defensa INT
 );
@@ -261,6 +262,23 @@ END;
 GO
 
 --Carta
+--LEER
+CREATE PROCEDURE sp_listar_carta
+@criterio NVARCHAR(100) 
+AS
+BEGIN
+	SELECT
+		id_carta, tipo_carta, nombre_carta, foto, poder_ataque, poder_defensa
+	FROM 
+		Carta
+	WHERE
+		(@criterio IS NULL OR tipo_carta LIKE '%' + @criterio + '%')
+		OR (@criterio IS NULL OR nombre_carta LIKE '%' + @criterio + '%')
+		OR (@criterio IS NULL OR (ISNUMERIC(@criterio) = 1 AND poder_ataque = CAST(@criterio AS INT)))
+		OR (@criterio IS NULL OR (ISNUMERIC(@criterio) = 1 AND poder_defensa = CAST(@criterio AS INT)))
+END;
+GO
+
 
 
 --Llenar las tablas

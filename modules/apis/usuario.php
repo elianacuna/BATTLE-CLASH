@@ -51,7 +51,6 @@ function iniciarSesion($conn){
     }
 }
 
-
 function crearJugadorusuario($conn) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'register') {
 
@@ -158,7 +157,6 @@ function obtenerUsuarioPorId($conn) {
     }
 }
 
-
 function actualizarUsuarioRol($conn) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'update') {
 
@@ -194,7 +192,7 @@ function actualizarUsuarioRol($conn) {
 }
 
 // Determinar la acción
-function determinarLoginRegister($conn){
+function determinarFuncionUsuario($conn){
     if (isset($_GET['action'])) {
         if ($_GET['action'] === 'login') {
             iniciarSesion($conn);
@@ -214,5 +212,5 @@ function determinarLoginRegister($conn){
     }    
 }
 
-determinarLoginRegister($conn)
+determinarFuncionUsuario($conn);
 ?>
