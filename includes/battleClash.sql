@@ -41,7 +41,7 @@ GO
 CREATE TABLE Carta (
     id_carta INT PRIMARY KEY IDENTITY(1,1),
     tipo_carta VARCHAR(50),
-    nombre_carta VARCHAR(100),
+    nombre_carta VARCHAR(100) UNIQUE,
     foto NVARCHAR(255) NOT NULL,
     poder_ataque INT,
     poder_defensa INT
@@ -50,7 +50,7 @@ GO
 
 CREATE TABLE Arena (
     id_arena INT PRIMARY KEY IDENTITY(1,1),
-    nombre_arena VARCHAR(100),
+    nombre_arena VARCHAR(100) UNIQUE,
     tipo_arena VARCHAR(50),
     ranking_min INT,
     ranking_max INT
@@ -278,7 +278,6 @@ BEGIN
 		OR (@criterio IS NULL OR (ISNUMERIC(@criterio) = 1 AND poder_defensa = CAST(@criterio AS INT)))
 END;
 GO
-
 
 
 --Llenar las tablas
