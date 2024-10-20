@@ -28,7 +28,7 @@ function seleccionar_imagen() {
 }
 
 function subirImagen(file) {
-    const storageRef = storage.ref('game/' + file.name); // Crear referencia en Firebase Storage
+    const storageRef = storage.ref('game/' + file.name); 
 
     const task = storageRef.put(file);
 
