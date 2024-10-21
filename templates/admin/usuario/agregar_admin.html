@@ -55,7 +55,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        $('#registerForm').on('submit', function(e) {
+    $('#registerForm').on('submit', function(e) {
     e.preventDefault();
 
     $('#registerButton').prop('disabled', true);
@@ -95,13 +95,12 @@
     });
 });
 
-// Verificar si el usuario a iniciado sesion
 window.onload = function() {
             fetch('../../../modules/apis/functions.php?action=checkLogin')
                 .then(response => response.json())
                 .then(data => {
                     if (data.status !== 'logged_in') {
-                        // Si no está logueado, redirigir a login.html
+
                         window.location.href = '../../../login.html';
 
                     }

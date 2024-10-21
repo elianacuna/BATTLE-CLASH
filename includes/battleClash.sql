@@ -279,6 +279,22 @@ BEGIN
 END;
 GO
 
+--Crear
+CREATE PROCEDURE sp_insertar_carta
+@link NVARCHAR(255),
+@nombre NVARCHAR(50),
+@tipo NVARCHAR(50),
+@poderAtaque INT,
+@poderDefensa INT
+AS
+BEGIN
+  
+  INSERT INTO Carta(foto, nombre_carta, tipo_carta, poder_ataque, poder_defensa)
+  VALUES (@link, @nombre, @tipo, @poderAtaque, @poderDefensa);
+  
+END;
+GO
+
 
 --Llenar las tablas
 EXEC sp_registrar_jugador 

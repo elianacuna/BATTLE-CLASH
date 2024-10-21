@@ -114,13 +114,11 @@
     });
 });
 
-// Verificar si el usuario a iniciado sesion
 window.onload = function() {
             fetch('../../../modules/apis/functions.php?action=checkLogin')
                 .then(response => response.json())
                 .then(data => {
                     if (data.status !== 'logged_in') {
-                        // Si no está logueado, redirigir a login.html
                         window.location.href = '../../../login.html';
                     }
                 })
