@@ -53,7 +53,7 @@ function guardarCarta(event) {
         return;
     }
 
-    const storageRef = storage.ref('game/' + file.name);
+    const storageRef = storage.ref('carta/' + file.name);
     const task = storageRef.put(file);
 
     task.on(
