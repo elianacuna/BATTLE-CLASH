@@ -310,6 +310,46 @@ BEGIN
 END;
 GO
 
+--Actualizar
+CREATE PROCEDURE sp_actualizar_carta
+@id INT,
+@foto NVARCHAR(255),
+@nombre NVARCHAR(100),
+@tipo NVARCHAR(100),
+@poderAtaque INT,
+@poderDefensa INT
+AS
+BEGIN
+    UPDATE 
+	    Carta
+	SET 
+	    foto = @foto, nombre_carta = @nombre, tipo_carta = @tipo,
+		poder_ataque = @poderAtaque, poder_defensa = @poderDefensa
+	WHERE 
+	    id_carta = @id
+END;
+GO
+
+--Este sp es para actulizar la carta sin la foto solo datos
+--Actualizar
+CREATE PROCEDURE sp_actualizar_carta_sin_foto
+@id INT,
+@nombre NVARCHAR(100),
+@tipo NVARCHAR(100),
+@poderAtaque INT,
+@poderDefensa INT
+AS
+BEGIN
+    UPDATE 
+	    Carta
+	SET 
+	    nombre_carta = @nombre, tipo_carta = @tipo,
+		poder_ataque = @poderAtaque, poder_defensa = @poderDefensa
+	WHERE 
+	    id_carta = @id
+END;
+GO
+
 
 --Llenar las tablas
 EXEC sp_registrar_jugador 

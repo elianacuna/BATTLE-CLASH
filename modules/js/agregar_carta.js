@@ -115,7 +115,8 @@ function subirInfoCarta(downloadURL, nombreCarta, tipoCarta, poderAtaque, poderD
     .then(result => {
         if (result.status === 'success') {
             console.log('Carta registrada correctamente:', result.message);
-            
+            window.location.href = '../../../templates/admin/cartas/cartas.html'; 
+
         } else {
             console.error('Error al registrar la carta:', result.message);
         }
