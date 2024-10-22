@@ -295,6 +295,21 @@ BEGIN
 END;
 GO
 
+--Listar carta para actualizar:
+CREATE PROCEDURE sp_leer_info_carta
+@id INT
+AS
+BEGIN
+    SELECT 
+        id_carta, foto, nombre_carta, tipo_carta, poder_ataque,
+		poder_defensa
+    FROM 
+        Carta 
+    WHERE 
+        id_carta = @id
+END;
+GO
+
 
 --Llenar las tablas
 EXEC sp_registrar_jugador 

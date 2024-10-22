@@ -78,6 +78,38 @@ function crearNuevaCarta($conn) {
     }
 }
 
+function obtenerCartaPorId($conn) {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
+        $id = $_GET['id'];
+
+        if (!is_numeric($id)) {
+            echo json_encode(['error' => 'El ID debe ser un número']);
+            exit();
+        }
+
+        $sql = "exec sp_leer_info_carta @id = ? ";
+        $params = array($id);
+        $stmt = sqlsrv_query($conn, $sql, $params);
+
+        if ($stmt === false) {
+            echo json_encode(['error' => 'Error en la consulta', 'details' => sqlsrv_errors()]);
+            exit();
+        }
+
+        $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+
+        if ($userData) {
+            echo json_encode(['status' => 'success', 'data' => $userData]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Carta no encontrado']);
+        }
+
+        sqlsrv_free_stmt($stmt);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Solicitud inválida o falta el parámetro ID']);
+    }
+}
+
 
 function determinarFuncionCarta($conn){
     if (isset($_GET['action'])) {
@@ -85,6 +117,8 @@ function determinarFuncionCarta($conn){
             listarCartas($conn);
         } elseif ($_GET['action'] === 'insert') {
             crearNuevaCarta($conn);
+        } elseif ($_GET['action'] === 'obtenerCartaPorId') {
+            obtenerCartaPorId($conn);  
         }
     } else {
         echo json_encode(['error' => 'No se especificó ninguna acción']);

@@ -30,7 +30,7 @@
         </form>
 
         <div id="cardContainer" class="row row-cols-1 row-cols-md-3 g-4">
-            <!-- Aquí se insertarán las cartas como cards -->
+            <!-- Aqui iran los datos de las Cartas en CardView -->
         </div>
     </div>
 
@@ -68,7 +68,8 @@
 
                         $('.edit-btn').on('click', function() {
                             var cartaId = $(this).data('id');
-                            window.location.href = 'actualizar_carta.html?id=' + cartaId;
+                            //console.log(cartaId);
+                            window.location.href = 'editar_carta.html?id=' + cartaId;
                         });
 
                     } else {
