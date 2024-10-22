@@ -1,13 +1,14 @@
 // Inicializar Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyCoxj0pmiIVW48XP89jHOvCJ-a4hn8SGQo",
-    authDomain: "battleclash-222a4.firebaseapp.com",
-    projectId: "battleclash-222a4",
-    storageBucket: "battleclash-222a4.appspot.com",
-    messagingSenderId: "1067459995622",
-    appId: "1:1067459995622:web:0d36dc2132f9583290d827",
-    measurementId: "G-TM7YDDNWJ1"
-};
+    apiKey: "AIzaSyAaNOIIh0793zmZjACLDC-kauSsGNhqSvc",
+    authDomain: "battleclash-85fc5.firebaseapp.com",
+    projectId: "battleclash-85fc5",
+    storageBucket: "battleclash-85fc5.appspot.com",
+    messagingSenderId: "162502778140",
+    appId: "1:162502778140:web:5b80d0a05d475d9c8a2ed9",
+    measurementId: "G-L6D1S53GLK"
+  };
+
 
 // Variables globales
 const app = firebase.initializeApp(firebaseConfig);
@@ -109,7 +110,6 @@ function subirInfoCarta(downloadURL, nombreCarta, tipoCarta, poderAtaque, poderD
         body: JSON.stringify(data)
     })
     .then(response => {
-        console.log("Respuesta completa del servidor:", response);  // Para ver la respuesta completa
         return response.json();
     })
     .then(result => {
