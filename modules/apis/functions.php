@@ -23,6 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
 function cerrarSesion() {
     session_destroy();
     echo json_encode(['status' => 'success', 'message' => 'Sesión cerrada']);
-    error_log('Sesión cerrada correctamente.'); // Esto solo sirve para logs, no se envía al cliente
+    error_log('Sesión cerrada correctamente.'); 
 }
 ?>

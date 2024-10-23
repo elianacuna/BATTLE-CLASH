@@ -88,6 +88,5 @@ function determinarFuncionCarta($conn){
     }
 }
 
-// Llamar a la función principal para determinar la acción
 determinarFuncionCarta($conn);
 ?>

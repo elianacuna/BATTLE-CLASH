@@ -89,7 +89,7 @@ function seleccionar_imagen() {
 function guardarCarta(event) {
     event.preventDefault();
 
-    // Variables
+    // Variables para los input
     const tipoCarta = document.getElementById('tipoCarta').value.trim();
     const nombreCarta = document.getElementById('nombreCarta').value.trim();
     const poderAtaque = document.getElementById('poderAtaque').value.trim();
@@ -102,7 +102,6 @@ function guardarCarta(event) {
         return;
     }
 
-    // Si no se ha seleccionado una nueva imagen
     if (!file) {
         if (confirm('¿Quieres actualizar solo los datos sin ninguna imagen?')) {
             actualizarInfoCarta(nombreCarta, tipoCarta, poderAtaque, poderDefensa);
@@ -144,7 +143,7 @@ function guardarCarta(event) {
 
 
 function actualizarInfoCarta(downloadURL, nombreCarta, tipoCarta, poderAtaque, poderDefensa) {
-    // Obtener el ID de la carta desde la URL
+
     const cartaId = getParameterByName('id');
     
     const data = {

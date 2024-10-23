@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BattleClash</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/usuario.css">
+</head>
+<body>
+
+    <header class="bg-primary text-white py-3 shadow-sm">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="../../../index.html" class="btn btn-outline-light d-flex align-items-center">
+                <i class="bi bi-arrow-left-circle me-2"></i> Regresar
+            </a>
+            <div class="text-center flex-grow-1">
+                <h1 class="fs-3 mb-0 fw-bold">Gestionar Arenas</h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mt-4">
+        <form id="searchForm" class="d-flex justify-content-center mb-4">
+            <div class="form-group me-3">
+                <input type="text" id="criterio" class="form-control" placeholder="Buscar por Nombre o Tipo de Arena">
+            </div>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a href="agregar_arena.html" class="btn btn-outline-secondary ms-2">Agregar</a>
+        </form>
+
+        <div id="arenaContainer" class="row row-cols-1 row-cols-md-3 g-4">
+            <!-- Aquí irán los datos de las Arenas en CardView -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function cargarArenas(criterio = '') {
+            $.ajax({
+                url: '../../../modules/apis/arena.php?action=listar',
+                method: 'GET',
+                data: {
+                    criterio: criterio
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        $('#arenaContainer').empty();
+                        response.data.forEach(function(arena) {
+                            $('#arenaContainer').append(`
+                                <div class="col">
+                                    <div class="card h-100 shadow-sm">
+                                        <img src="${arena.fondo}" class="card-img-top" alt="Imagen de ${arena.nombre_arena}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${arena.nombre_arena}</h5>
+                                            <p class="card-text">Tipo: ${arena.tipo_arena}</p>
+                                            <p class="card-text">Ranking Mínimo: ${arena.ranking_min}</p>
+                                            <p class="card-text">Ranking Máximo: ${arena.ranking_max}</p>
+                                            <button class="btn btn-warning edit-btn" data-id="${arena.id_arena}">Editar</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            `);
+                        });
+
+                        $('.edit-btn').on('click', function() {
+                            var arenaId = $(this).data('id');
+                            window.location.href = 'editar_arena.html?id=' + arenaId;
+                        });
+
+                    } else {
+                        $('#arenaContainer').html('<p class="text-center">No se encontraron arenas</p>');
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                    $('#arenaContainer').html('<p class="text-center text-danger">Error al buscar arenas</p>');
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            cargarArenas();  
+        });
+
+        $('#searchForm').on('submit', function(e) {
+            e.preventDefault();
+            var criterio = $('#criterio').val();
+            cargarArenas(criterio); 
+        });
+
+        window.onload = function() {
+            fetch('../../../modules/apis/functions.php?action=checkLogin')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status !== 'logged_in') {
+                        window.location.href = '../../../login.html';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error verificando la sesión:', error);
+                    window.location.href = '../../../login.html';
+                });
+        };
+    </script>
+</body>
+</html>

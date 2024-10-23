@@ -4,7 +4,7 @@ include_once '../../includes/db_connection.php';
 header('Content-Type: application/json');
 
 function iniciarSesion($conn){
-    session_start();  // Asegúrate de iniciar la sesión al principio
+    session_start();  
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $input = json_decode(file_get_contents('php://input'), true);
@@ -28,7 +28,6 @@ function iniciarSesion($conn){
         $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
     
         if ($userData) {
-            // Establece las variables de sesión
             $_SESSION['loggedin'] = true;
             $_SESSION['user_id'] = $userData['ID'];
             $_SESSION['user_email'] = $userData['email'];
@@ -191,7 +190,6 @@ function actualizarUsuarioRol($conn) {
     }
 }
 
-// Determinar la acción
 function determinarFuncionUsuario($conn){
     if (isset($_GET['action'])) {
         if ($_GET['action'] === 'login') {

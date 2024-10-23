@@ -1,5 +1,5 @@
 // Inicializar Firebase
-const firebaseConfig = {
+var firebaseConfig = {
     apiKey: "AIzaSyAaNOIIh0793zmZjACLDC-kauSsGNhqSvc",
     authDomain: "battleclash-85fc5.firebaseapp.com",
     projectId: "battleclash-85fc5",
@@ -7,12 +7,14 @@ const firebaseConfig = {
     messagingSenderId: "162502778140",
     appId: "1:162502778140:web:5b80d0a05d475d9c8a2ed9",
     measurementId: "G-L6D1S53GLK"
-  };
+};
 
-
-// Variables globales
+// Inicializar Firebase
 const app = firebase.initializeApp(firebaseConfig);
-const storage = firebase.storage();  
+const storage = firebase.storage();
+
+console.log('Firebase inicializado correctamente:', app);
+
 let input, file, previewImage;
 const urlAPI = "http://localhost/BATTLE-CLASH/modules/apis";
 
@@ -26,24 +28,25 @@ function seleccionar_imagen() {
         if (file) {
             previewImage = document.getElementById('previewImage');
             previewImage.src = URL.createObjectURL(file); 
+            console.log('Imagen seleccionada:', file);
         }
     };
 
     input.click(); 
 }
 
-function guardarCarta(event) {
+function guardarArena(event) {
     event.preventDefault();
 
-    // Variables
-    const tipoCarta = document.getElementById('tipoCarta').value.trim();
-    const nombreCarta = document.getElementById('nombreCarta').value.trim();
-    const poderAtaque = document.getElementById('poderAtaque').value.trim();
-    const poderDefensa = document.getElementById('poderDefensa').value.trim();
+    // Variables de los input
+    const nombreArena = document.getElementById('nombreArena').value.trim();
+    const tipoArena = document.getElementById('tipoArena').value.trim();
+    const rankingMin = document.getElementById('rankingMin').value.trim();
+    const rankingMax = document.getElementById('rankingMax').value.trim();
 
-    console.log("Variables capturadas:", { tipoCarta, nombreCarta, poderAtaque, poderDefensa });
+    console.log("Variables capturadas:", { nombreArena, tipoArena, rankingMin, rankingMax });
 
-    if (!tipoCarta || !nombreCarta || !poderAtaque || !poderDefensa) {
+    if (!nombreArena || !tipoArena || !rankingMin || !rankingMax) {
         alert('Por favor, complete todos los campos.');
         return;
     }
@@ -53,7 +56,7 @@ function guardarCarta(event) {
         return;
     }
 
-    const storageRef = storage.ref('carta/' + file.name);
+    const storageRef = storage.ref('arena/' + file.name);
     const task = storageRef.put(file);
 
     task.on(
@@ -66,7 +69,7 @@ function guardarCarta(event) {
             progressBar.textContent = Math.round(progress) + '%';
 
             if (progress === 100) {
-                progressBar.classList.add('bg-success'); 
+                progressBar.classList.add('bg-success');
             }
         },
         (error) => {
@@ -75,11 +78,8 @@ function guardarCarta(event) {
         },
         () => {
             task.snapshot.ref.getDownloadURL().then((downloadURL) => {
-
-                console.log( "enviando datos:" + downloadURL, nombreCarta, tipoCarta, poderAtaque, poderDefensa)
-
-                subirInfoCarta(downloadURL, nombreCarta, tipoCarta, poderAtaque, poderDefensa);
-
+                console.log("Enviando datos:", downloadURL, nombreArena, tipoArena, rankingMin, rankingMax);
+                subirInfoArena(downloadURL, nombreArena, tipoArena, rankingMin, rankingMax);
             }).catch((error) => {
                 console.error('Error al obtener el URL de descarga: ', error);
                 alert('Error al obtener el URL de descarga.');
@@ -88,20 +88,18 @@ function guardarCarta(event) {
     );
 }
 
-function subirInfoCarta(downloadURL, nombreCarta, tipoCarta, poderAtaque, poderDefensa) {
-    
-    console.log("url:", downloadURL);
-
+function subirInfoArena(downloadURL, nombreArena, tipoArena, rankingMin, rankingMax) {
     const data = {
         link: downloadURL,
-        nombre: nombreCarta,
-        tipo: tipoCarta,
-        poderAtaque: poderAtaque,
-        poderDefensa: poderDefensa
+        nombre: nombreArena,
+        tipo: tipoArena,
+        rankingMin: rankingMin,
+        rankingMax: rankingMax
     };
 
+    console.log("Datos enviados a la API:", data);
 
-    fetch(urlAPI + '/carta.php?action=insert', {
+    fetch(urlAPI + '/arena.php?action=insert', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -109,20 +107,23 @@ function subirInfoCarta(downloadURL, nombreCarta, tipoCarta, poderAtaque, poderD
         body: JSON.stringify(data)
     })
     .then(response => {
+        if (!response.ok) {
+            throw new Error("Error en la solicitud de red: " + response.statusText);
+        }
         return response.json();
     })
     .then(result => {
+        console.log('Respuesta completa de la API:', result);
         if (result.status === 'success') {
-            console.log('Carta registrada correctamente:', result.message);
-            window.location.href = '../../../templates/admin/cartas/cartas.html'; 
-
+            console.log('Arena registrada correctamente:', result.message);
+            window.location.href = '../../../templates/admin/arena/arena.html'; 
         } else {
-            console.error('Error al registrar la carta:', result.message);
+            console.error('Error al registrar la arena:', result.message || 'Respuesta inesperada');
+            alert(result.message || 'Hubo un error al registrar la arena.');
         }
     })
     .catch(error => {
         console.error('Error en la solicitud:', error);
+        alert('Error en la solicitud a la API. Revisa la consola para más detalles.');
     });
 }
-
-

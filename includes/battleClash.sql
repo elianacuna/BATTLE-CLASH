@@ -51,6 +51,7 @@ GO
 CREATE TABLE Arena (
     id_arena INT PRIMARY KEY IDENTITY(1,1),
     nombre_arena VARCHAR(100) UNIQUE,
+	fondo NVARCHAR(255), 
     tipo_arena VARCHAR(50),
     ranking_min INT,
     ranking_max INT
@@ -382,6 +383,47 @@ BEGIN
 
 END;
 GO
+
+--Arena
+--Listar
+CREATE PROCEDURE sp_listar_arena
+@criterio NVARCHAR(255)
+AS
+BEGIN
+
+    SELECT
+	    nombre_arena, fondo, tipo_arena, 
+		ranking_min, ranking_max
+	FROM 
+	    Arena
+	WHERE
+	    (@criterio IS NULL OR nombre_arena LIKE '%' + @criterio + '%')
+		OR (@criterio IS NULL OR tipo_arena LIKE '%' + @criterio + '%')
+		OR (@criterio IS NULL OR (ISNUMERIC(@criterio) = 1 AND ranking_max = CAST(@criterio AS INT)))
+		OR (@criterio IS NULL OR (ISNUMERIC(@criterio) = 1 AND ranking_min = CAST(@criterio AS INT)))
+END;
+GO
+
+--Crear
+CREATE PROCEDURE sp_insertar_arena
+@nombre NVARCHAR(100),
+@fondoURL NVARCHAR(255),
+@tipo NVARCHAR(100),
+@rankingMin INT,
+@rankingMax INT
+AS
+BEGIN
+
+    INSERT INTO 
+	    Arena(nombre_arena, fondo, tipo_arena, ranking_min, ranking_max)
+	VALUES
+	    (@nombre, @fondoURL ,@tipo, @rankingMin, @rankingMax);
+
+END;
+GO
+
+--Actualizar
+
 
 
 --Llenar las tablas
