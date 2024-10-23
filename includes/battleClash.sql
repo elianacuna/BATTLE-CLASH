@@ -392,7 +392,7 @@ AS
 BEGIN
 
     SELECT
-	    nombre_arena, fondo, tipo_arena, 
+	    id_arena, nombre_arena, fondo, tipo_arena, 
 		ranking_min, ranking_max
 	FROM 
 	    Arena

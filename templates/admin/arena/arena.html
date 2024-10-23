@@ -30,7 +30,7 @@
         </form>
 
         <div id="arenaContainer" class="row row-cols-1 row-cols-md-3 g-4">
-            <!-- Aquí irán los datos de las Arenas en CardView -->
+            
         </div>
     </div>
 
@@ -57,8 +57,7 @@
                                             <p class="card-text">Tipo: ${arena.tipo_arena}</p>
                                             <p class="card-text">Ranking Mínimo: ${arena.ranking_min}</p>
                                             <p class="card-text">Ranking Máximo: ${arena.ranking_max}</p>
-                                            <button class="btn btn-warning edit-btn" data-id="${arena.id_arena}">Editar</button>
-                                        </div>
+                                            <button class="btn btn-warning edit-btn" data-id="${arena.id_arena}">Editar</button>                                        </div>
                                     </div>
                                 </div>
 
@@ -66,8 +65,9 @@
                         });
 
                         $('.edit-btn').on('click', function() {
-                            var arenaId = $(this).data('id');
-                            window.location.href = 'editar_arena.html?id=' + arenaId;
+                            var cartaId = $(this).data('id');
+                            console.log(cartaId);
+                            //window.location.href = 'editar_arena.html?id=' + cartaId;
                         });
 
                     } else {
