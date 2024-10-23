@@ -350,6 +350,39 @@ BEGIN
 END;
 GO
 
+--Buscar usuario para restablecer 
+CREATE PROCEDURE sp_buscar_usuario
+@correo NVARCHAR(255)
+AS
+BEGIN
+
+    SELECT
+	    id_jugador, nombre_usuario, correo
+	FROM
+	    Usuario
+	WHERE
+	    correo = @correo
+END;
+GO
+
+--Cambiar contraseña
+CREATE PROCEDURE sp_cambiar_contrasena
+    @contrasena NVARCHAR(255),
+    @id INT
+AS
+BEGIN
+
+    DECLARE @nuevaContrasena VARBINARY(64);
+
+    SET @nuevaContrasena = HASHBYTES('SHA2_256', @contrasena);
+
+    UPDATE Usuario
+    SET contrasena = @nuevaContrasena
+    WHERE id_jugador = @id;
+
+END;
+GO
+
 
 --Llenar las tablas
 EXEC sp_registrar_jugador 

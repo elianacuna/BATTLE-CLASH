@@ -56,7 +56,6 @@
     var correo = $('#correo').val();
     var contrasena = $('#contrasena').val();
 
-    // Aquí haces la llamada AJAX al servidor para registrar al usuario
     $.ajax({
         url: 'modules/apis/usuario.php?action=register', 
         method: 'POST',
@@ -70,8 +69,9 @@
         success: function(response) {
             if (response.status === 'success') {
                 $('#responseMessage').html('<div class="alert alert-success">Usuario registrado correctamente. Ahora puedes iniciar sesión.</div>');
-                // Redirigir a main.html
+
                 window.location.href = 'main.html';
+
             } else {
                 $('#responseMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
             }
