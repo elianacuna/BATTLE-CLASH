@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "battleclash-game",
-    "public": "public",
+    "public": "BATTLE-CLASH",
     "ignore": [
       "firebase.json",
       "**/.*",

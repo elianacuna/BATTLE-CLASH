@@ -36,7 +36,7 @@ $(document).ready(function() {
 
 function cargarDatosArena(arenaId) {
     $.ajax({
-        url: '../../../modules/apis/arena.php?action=obtenerArenaPorId',  // Usa el nuevo action
+        url: '../../../modules/apis/arena.php?action=obtenerArenaPorId',  
         method: 'GET',
         data: { id: arenaId },  
 
@@ -97,8 +97,7 @@ function guardarArena(event) {
     const rankingMin = document.getElementById('rankingMin').value.trim();
     const rankingMax = document.getElementById('rankingMax').value.trim();
 
-    console.log("Variables capturadas:", { tipoArena, nombreArena, rankingMin, rankingMax });
-
+    // Verificar si los campos están completos
     if (!tipoArena || !nombreArena || !rankingMin || !rankingMax) {
         alert('Por favor, complete todos los campos.');
         return;
@@ -141,6 +140,7 @@ function guardarArena(event) {
     }
 }
 
+
 function actualizarInfoArena(downloadURL, nombreArena, tipoArena, rankingMin, rankingMax) {
     const arenaId = getParameterByName('id');
 
@@ -177,8 +177,12 @@ function actualizarInfoArena(downloadURL, nombreArena, tipoArena, rankingMin, ra
 }
 
 function actualizarInfoArenaSoloDatos(nombreArena, tipoArena, rankingMin, rankingMax) {
+
     const arenaId = getParameterByName('id');
 
+    console.log("data:" + arenaId + nombreArena + tipoArena + rankingMin + rankingMax); 
+
+ 
     const data = {
         id: arenaId,
         nombre: nombreArena,
@@ -186,6 +190,7 @@ function actualizarInfoArenaSoloDatos(nombreArena, tipoArena, rankingMin, rankin
         rankingMin: rankingMin,
         rankingMax: rankingMax
     };
+    
 
     fetch(urlAPI + '/arena.php?action=updateData', {
         method: 'POST',
@@ -208,4 +213,8 @@ function actualizarInfoArenaSoloDatos(nombreArena, tipoArena, rankingMin, rankin
         console.error('Error en la solicitud:', error);
         alert('Ocurrió un error al intentar actualizar la arena.');
     });
+    
+
+   // */
+
 }

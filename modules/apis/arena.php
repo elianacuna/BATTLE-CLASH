@@ -123,7 +123,7 @@ function actualizarArena($conn){
     }
 }
 
-function  actualizarInfoArenaSoloDatos($conn){
+function actualizarInfoArenaSoloDatos($conn){
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'updateData') {
         
         $input = json_decode(file_get_contents('php://input'), true);
@@ -137,7 +137,7 @@ function  actualizarInfoArenaSoloDatos($conn){
         $nombre = $input['nombre'];
         $tipo = $input['tipo'];
         $rankingMin = $input['rankingMin'];
-        $rankingMax = $input['RankingMax'];
+        $rankingMax = $input['rankingMax'];
 
         $sql = "{CALL sp_actualizar_arena_sin_foto(?, ?, ?, ?, ?)}";
         $params = array($id, $nombre, $tipo, $rankingMin, $rankingMax);
