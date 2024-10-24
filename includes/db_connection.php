@@ -43,3 +43,21 @@ function getConnection() {
     global $conn;
     return $conn;
 }
+
+/*
+# Credenciales de la conexióon  a la DB
+
+DB_SERVER=EACUNAP\SQLEXPRESS
+DB_USERNAME=sa
+DB_PASSWORD=Holaque2
+DB_NAME=BattleClash
+
+# Configuración del juego
+APP_NAME=BattleClash
+APP_VERSION=1.0.0 #Versión
+
+#BattleClash.mssql.somee.com
+#eacunap_SQLLogin_1
+#659l1ty3uv
+#BattleClash
+*/
