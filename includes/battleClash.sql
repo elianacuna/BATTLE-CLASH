@@ -423,8 +423,64 @@ END;
 GO
 
 --Actualizar
+CREATE PROCEDURE sp_actualizar_arena
+@id INT,
+@fondo NVARCHAR(255),
+@nombre NVARCHAR(100),
+@tipo NVARCHAR(100),
+@rankingMin INT,
+@rankingMax INT
+AS
+BEGIN
 
+    UPDATE
+	    Arena
+	SET
+	   fondo = @fondo, nombre_arena = @nombre, tipo_arena = @tipo, 
+		ranking_min = @rankingMin, ranking_max = @rankingMax
+	WHERE
+	    id_arena = @id
 
+END;
+GO
+
+--Actualizar solo los datos de la arena 
+CREATE PROCEDURE sp_actualizar_arena_sin_foto
+@id INT,
+@nombre NVARCHAR(100),
+@tipo NVARCHAR(100),
+@rankingMin INT,
+@rankingMax INT
+AS
+BEGIN
+
+    UPDATE
+	    Arena
+	SET
+	    nombre_arena = @nombre, tipo_arena = @tipo, 
+		ranking_min = @rankingMin, ranking_max = @rankingMax
+	WHERE
+	    id_arena = @id
+
+END;
+GO
+
+--Obtener la info de la Arena:
+CREATE PROCEDURE sp_leer_arena
+@id INT
+AS
+BEGIN
+
+    SELECT
+	    nombre_arena, fondo, tipo_arena,
+		ranking_max, ranking_min
+	FROM
+	    Arena
+	WHERE
+	    id_arena = @id
+
+END;
+GO
 
 --Llenar las tablas
 EXEC sp_registrar_jugador 
